@@ -14,7 +14,6 @@ import { TodoService } from './todo.service';
 })
 export class TodoComponent implements OnInit, OnDestroy {
   todos: Todo[] = [];
-  url: string = 'http://localhost:3000/api/todos';
   @ViewChild('form') todoForm: NgForm;
   updatedTodosSubscription: Subscription;
 
@@ -24,8 +23,10 @@ export class TodoComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    const url = 'http://localhost:3000/api/todos/get-todos';
+
     this.todoDataStorageService
-      .fetchTodos(this.url)
+      .fetchTodos(url)
       .pipe(
         map(
           (responseData: {
@@ -37,6 +38,7 @@ export class TodoComponent implements OnInit, OnDestroy {
               __v: number;
             }[];
           }) => {
+            
             return {
               message: responseData.message,
               todos: responseData.todos.map((todo) => {
@@ -46,17 +48,24 @@ export class TodoComponent implements OnInit, OnDestroy {
           }
         )
       )
-      .subscribe(responseData => {
-        this.todoService.setTodos(responseData.todos)
-        this.todos = responseData.todos;
+      .subscribe({
+        next: responseData => {
 
+          this.todoService.setTodos(responseData.todos);
+          this.todos = this.todoService.getTodos();
+
+          console.log('todos: ', this.todos);
+        },
+        error: err => {
+
+          console.log('Error: ', err.message);
+        }
       });
 
     this.updatedTodosSubscription = this.todoService.updatedTodos.subscribe(
       todos => {
-        console.log('triggered: ', this.todos)
+
         this.todos = todos;
-        console.log('triggered-after: ', this.todos)
       }
     );
   }
@@ -65,11 +74,22 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   onAddTodo(): void {
+    const url = 'http://localhost:3000/api/todos/create-todo';
+
     const todo = this.todoForm.value;
 
-    this.todoDataStorageService.createTodo(this.url, todo).subscribe(responseData => {
-      this.todos.push({id: responseData.todo._id, checked: responseData.todo.checked, todo: responseData.todo.todo})
+    this.todoDataStorageService.createTodo(url, todo)
+    .subscribe({
+      next: responseData => {
+
+        this.todos.push({id: responseData.todo._id, checked: responseData.todo.checked, todo: responseData.todo.todo});
+      },
+      error: err => {
+
+        console.log('Error: ', err.message);
+      }
     });
+
 
     this.todoForm.reset();
   }

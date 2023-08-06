@@ -2,16 +2,15 @@
     <div class="flex flex-col bg-background relative w-11/12 md:w-1/2 p-3 md:p-4 font-normal rounded-xl">
       <div class="flex flex-col items-center">
         <h1 class="text-4xl text-primary-2 mb-4">To Do App</h1>
-        <!-- (ngSubmit)="onAddTodo()" #form="ngForm" -->
-        <form   class="flex">
-            <!-- (click)="onLogout()" -->
-          <button  type="button" class="background-red rounded-md px-3 absolute left-3 top-3 py-2 font-medium">Logout</button>
-          <!-- #todo="ngModel" -->
-            <input ngModel  name="todo" required type="text"
+        
+        <form (ngSubmit)="onAddTodo()" #form="ngForm" class="flex">
+            
+          <button (click)="onLogout()" type="button" class="background-red rounded-md px-3 absolute left-3 top-3 py-2 font-medium">Logout</button>
+          
+            <input ngModel #todo="ngModel" name="todo" required type="text"
             class="w-52 bg-soft py-2 text-red-500 px-4 rounded-tl-md rouded-bl-md" placeholder="some words">
-            <!-- (click)="onAddTodo()" -->
-            <!-- [disabled]="todo.invalid" -->
-          <button  >
+            
+          <button (click)="onAddTodo()" [disabled]="todo.invalid">
             <svg class="w-10 h-10 bg-secondary rounded-tr-md rounded-br-md" viewBox="0 0 24 24" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -25,14 +24,15 @@
             </svg>
           </button>
         </form>
-        <!-- *ngIf="todo.invalid && todo.touched" -->
-        <p id="todo-invalidator"  class="font-bold mt-1">Please enter todo item!</p>
+        <p *ngIf="todo.invalid && todo.touched" 
+        id="todo-invalidator"  
+        class="font-bold mt-1">Please enter todo item!</p>
   
       </div>
       <hr class="my-3">
       <div class="flex overflow-y-auto w-full h-full flex-col gap-2">
-        <!-- [todoItem]="todo" *ngFor="let todo of todos" -->
-        <app-todo-list  ></app-todo-list>
+        
+        <app-todo-list [todoItem]="todo" *ngFor="let todo of todos"></app-todo-list>
       </div>
   
   

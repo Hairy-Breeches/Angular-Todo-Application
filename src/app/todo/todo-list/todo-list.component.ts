@@ -18,8 +18,7 @@ import {
     @ViewChild('checkbox') checkboxInput: ElementRef;
     @Input() todoItem: Todo;
     todoChecked: boolean = false;
-    url = 'http://localhost:3000/api/todos/';
-  
+    
     constructor(
       private todoDataStorageService: TodoDataStorageService
     ) {}
@@ -29,13 +28,28 @@ import {
     }
   
     onDeleteTodo(id: string): void {
-      this.todoDataStorageService.deleteTodo(id, this.url);
+      const url = 'http://localhost:3000/api/todos/delete-todo';
+  
+
+      this.todoDataStorageService.deleteTodo(id, url);
   
     }
   
     onTodoChecked(): void {
-      this.todoChecked = this.checkboxInput.nativeElement.checked;
-      this.todoDataStorageService.checkTodo(this.url, this.todoChecked, this.todoItem);
+      const url = 'http://localhost:3000/api/todos/todo-check';
+      
+      this.todoDataStorageService.checkTodo(url, !this.todoChecked, this.todoItem)
+      .subscribe({
+        next: ()  => {
+
+          this.todoChecked = this.checkboxInput.nativeElement.checked;  
+          this.todoDataStorageService.checkTodo(url, this.todoChecked, this.todoItem);
+        },
+        error: err => {
+
+          console.log('Error: ', err.message);
+        },
+      });
     }
   }
   

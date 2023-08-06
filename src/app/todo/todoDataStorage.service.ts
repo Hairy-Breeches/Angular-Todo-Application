@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 
 import { TodoService } from './todo.service';
 import { Todo } from './todo.model';
@@ -9,6 +10,7 @@ export class TodoDataStorageService {
   constructor(private http: HttpClient, private todoService: TodoService) {}
 
   createTodo(url: string, todo: { todo: string }) {
+    
     return this.http.post<{
       message: string;
       todo: { checked: boolean; todo: string; __v: number; _id: string };
@@ -16,6 +18,7 @@ export class TodoDataStorageService {
   }
 
   fetchTodos(url: string) {
+    
     return this.http.get<{
       message: string;
       todos: { _id: string; checked: boolean; todo: string; __v: number }[];
@@ -38,20 +41,19 @@ export class TodoDataStorageService {
       });
   }
 
-  checkTodo(url: string, todoChecked: boolean, todoItem: Todo): void {
-    this.http
+  checkTodo(url: string, todoChecked: boolean, todoItem: Todo) {
+    
+    return this.http
       .put(
-        url + todoItem.id,
+        url + '/?',
         {
           todoItem: todoItem,
           checked: todoChecked
-        }
-
-      )
-      .subscribe({
-        error: (error) => {
-          console.log('Error: ', error);
         },
-      });
+        {
+          params: new HttpParams().set('id', todoItem.id)
+        }
+      )
+      
   }
 }

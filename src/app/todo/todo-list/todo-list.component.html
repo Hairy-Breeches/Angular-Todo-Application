@@ -1,17 +1,14 @@
 <div>
-    <!-- [ngStyle]="{'background-color': todoChecked ? 'lightgreen':''}" -->
-    <div
+    <div [ngStyle]="{'background-color': todoChecked ? 'lightgreen':''}"
       class="flex bg-soft p-4 w-full relative rounded-md">
-      <!-- [checked]="todoItem.checked" (click)="onTodoChecked()" -->
-      <input   #checkbox type="checkbox"
+      <input [checked]="todoItem.checked" (click)="onTodoChecked()"  #checkbox type="checkbox"
         class="w-6 h-6 bg-soft rounded-full">
       <div class="text-center px-4 w-full">
-        <p class="text-xs md:text-sm">  </p>
-        <!-- {{ todoItem.todo }} -->
+        <p class="text-xs md:text-sm"> {{ todoItem.todo }} </p>
       </div>
       <div>
-        <!-- (click)="onDeleteTodo(todoItem.id)" -->
-        <svg class="w-6 h-6 absolute top-4 right-2 cursor-pointer" viewBox="0 0 24 24"
+        
+        <svg (click)="onDeleteTodo(todoItem.id)" class="w-6 h-6 absolute top-4 right-2 cursor-pointer" viewBox="0 0 24 24"
           fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
