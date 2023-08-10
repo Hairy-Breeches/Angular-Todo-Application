@@ -1,8 +1,9 @@
 const express = require('express');
 const Todo = require('../models/todo');
 const router = express.Router();
+const checkAuth = require('../middleware/checkAuth');
 
-router.post('/create-todo', (req, res) => {
+router.post('/create-todo', checkAuth, (req, res) => {
     
     const todo = new Todo({todo: req.body.todo, checked: false});
     console.log(req.headers.authorization)
@@ -21,7 +22,7 @@ router.post('/create-todo', (req, res) => {
     })
 })
 
-router.get('/get-todos', (req, res) => {
+router.get('/get-todos', checkAuth, (req, res) => {
 
     Todo.find()
     .then( documents => {
@@ -38,7 +39,7 @@ router.get('/get-todos', (req, res) => {
     })
 })
 
-router.put('/todo-check', (req, res) => {
+router.put('/todo-check', checkAuth, (req, res) => {
 
     Todo.updateOne({_id: req.query.id}, {checked: req.body.checked, _id: req.body.todoItem.id})
     .then(document => {
@@ -58,7 +59,7 @@ router.put('/todo-check', (req, res) => {
 
 })
 
-router.delete('/todo-delete', (req , res) => {
+router.delete('/todo-delete', checkAuth, (req , res) => {
     console.log('headers: ', req.headers.authorization)
 
     Todo.deleteOne({ _id: req.query.id })

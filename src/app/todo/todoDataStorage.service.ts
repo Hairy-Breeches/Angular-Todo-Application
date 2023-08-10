@@ -10,7 +10,7 @@ import { Todo } from './todo.model';
 
 @Injectable({ providedIn: 'root' })
 export class TodoDataStorageService {
-  constructor(private http: HttpClient, private todoService: TodoService, private authService: AuthService) {}
+  constructor(private http: HttpClient, private todoService: TodoService, private authService: AuthService) { }
 
   createTodo(url: string, todo: { todo: string }) {
     

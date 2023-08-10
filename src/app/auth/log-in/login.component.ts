@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
     templateUrl: './log-in.component.html',
 })
 export class LogInComponent {
-    constructor(private authServic: AuthService) { }
+    constructor(private authService: AuthService) { }
 
     onLogIn(logInForm: NgForm): void {
         if(!logInForm.valid)
@@ -19,7 +19,7 @@ export class LogInComponent {
         const user = new User(logInForm.value.email, logInForm.value.password);
         const url = 'http://localhost:3000/api/user/log-in';
 
-        this.authServic.logIn(url, user);
+        this.authService.logIn(url, user);
     }
 
 }

@@ -33,7 +33,7 @@ router.post('/sign-up', (req, res) => {
 
 
 router.post('/log-in', (req, res) => {
-   let fetchedUser = undefined;
+    let fetchedUser = undefined;
 
     User.findOne({email: req.body.email})
     .then(user => {
@@ -65,7 +65,8 @@ router.post('/log-in', (req, res) => {
         
         res.status(200).json({
             message: 'Auth passed!',
-            token: token
+            token: token,
+            expiresIn: 3600
             
         })
     })
