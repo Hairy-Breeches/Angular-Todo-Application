@@ -22,18 +22,18 @@ export class TodoService {
   }
 
   getTodos(): Todo[] {
+
     return this.todos.slice();
   }
 
   setTodos(todos: Todo[]): void {
     this.todos = todos;
+    
   }
 
   deleteTodo(id: string) {
-    console.log('todos-before: ', this.todos)
     this.todos = this.todos.filter(todo => todo.id !== id);
-    console.log('todos: ', this.todos)
-
     this.updatedTodos.next(this.todos.slice());
+
   }
 }

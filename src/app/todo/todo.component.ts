@@ -1,16 +1,17 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { NgForm } from '@angular/forms';
+
 import { Todo } from './todo.model';
+
 import { TodoDataStorageService } from './todoDataStorage.service';
 import { TodoService } from './todo.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent implements OnInit, OnDestroy {
   todos: Todo[] = [];
@@ -20,6 +21,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   constructor(
     private todoDataStorageService: TodoDataStorageService,
     private todoService: TodoService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -50,11 +52,9 @@ export class TodoComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: responseData => {
-
           this.todoService.setTodos(responseData.todos);
           this.todos = this.todoService.getTodos();
 
-          console.log('todos: ', this.todos);
         },
         error: err => {
 
@@ -71,6 +71,8 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   onLogout(): void {
+    this.authService.logOut();
+
   }
 
   onAddTodo(): void {

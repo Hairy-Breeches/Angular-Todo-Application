@@ -7,9 +7,12 @@ module.exports = {
       'primary-2': '#112D4E',
       'secondary': '#AAAAAA',
       'soft': '#DBE2EF',
-      'background': '#FFFFFF'
+      'background': '#FFFFFF',
+      'button': 'rgb(220 38 38)',
+      'warning': 'rgb(127 29 29)'
     },
     extend: {
+      
     },
   },
   plugins: [],

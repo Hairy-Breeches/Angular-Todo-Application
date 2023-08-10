@@ -1,0 +1,24 @@
+<div class="flex h-full items-center justify-center">
+    <form (ngSubmit)="onSignUp(SignInform)" #SignInform="ngForm" class="flex bg-background rounded-md h-5/6 w-1/2 flex-col gap-4 shadow-lg justify-center items-center  py-4">
+        <div class="flex flex-col gap-4 ">
+          <div class="flex flex-col">
+            <label class="font-medium mb-2 text-lg">Email</label>
+            <input #emailInput="ngModel" ngModel required email type="email" name="email" class="border-2 w-52 rounded-md border-gray-200 px-3 py-2">
+            <p *ngIf="emailInput.invalid && emailInput.touched" class="text-warning font-medium" >Please enter valid email!</p>
+    
+          </div>
+          <div class="flex flex-col w-full">
+            <label class="font-medium text-lg mt-4">Password</label>
+            <input ngModel #passwordInput="ngModel" required name="password" type="password" class="border-2 w-52 rounded-md border-gray-200 px-3 py-2">
+            <p *ngIf="passwordInput.invalid && passwordInput.touched" class="text-warning font-medium">Invalid password!</p>
+    
+          </div>
+
+        </div>
+    
+        <div class="flex w-1/3 mt-4">
+          <button type="submit" [disabled]="SignInform.invalid" class="px-3 ml-3 w-24 bg-primary-2 rounded-md text-background font-medium py-2">Sign Up</button>
+        
+        </div>
+      </form>
+</div>

@@ -12,7 +12,6 @@ import {
   @Component({
     selector: 'app-todo-list',
     templateUrl: './todo-list.component.html',
-    styleUrls: ['./todo-list.component.css'],
   })
   export class TodoListComponent implements OnInit {
     @ViewChild('checkbox') checkboxInput: ElementRef;
@@ -28,10 +27,8 @@ import {
     }
   
     onDeleteTodo(id: string): void {
-      const url = 'http://localhost:3000/api/todos/delete-todo';
-  
-
-      this.todoDataStorageService.deleteTodo(id, url);
+      const url = 'http://localhost:3000/api/todos/todo-delete';
+      this.todoDataStorageService.deleteTodo(url, id);
   
     }
   
