@@ -62,7 +62,7 @@ router.post('/log-in', (req, res) => {
         const secretKey = 'Secret_payload_signature_seed'
 
         const token = jwt.sign(payload, secretKey);
-        
+
         res.status(200).json({
             message: 'Auth passed!',
             token: token,

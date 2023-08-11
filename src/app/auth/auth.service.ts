@@ -8,12 +8,18 @@ export class AuthService {
     private token: string;
     private expiresInDuration: number;
     private timerRef: any;
+    private authenticated: boolean;
 
     constructor(private http: HttpClient, private router: Router) { }
 
     getToken(): string {
 
         return this.token;
+    }
+    
+    getAuthenticated(): boolean {
+
+        return this.authenticated;
     }
 
     signUp(url: string, user: User): void {
@@ -35,6 +41,7 @@ export class AuthService {
         this.http.post<{message: string, token: string, expiresIn: number}>(url, user)
         .subscribe({
             next: responseData => {
+                this.authenticated = true;
                 this.token = responseData.token;
                 this.expiresInDuration = responseData.expiresIn;
                 this.setTimer(this.expiresInDuration);
@@ -43,7 +50,7 @@ export class AuthService {
                 localStorage.setItem('token', responseData.token);
                 localStorage.setItem('expiresIn', expirationDate.toISOString());
                 this.router.navigate(['/']);
-
+                
             },
             error: err => {
                 console.log('Error: ', err.message);
@@ -55,6 +62,7 @@ export class AuthService {
     }
 
     logOut(): void {
+        this.authenticated = false;
         this.token = null;
         clearTimeout(this.timerRef);
         localStorage.removeItem('token');
@@ -90,6 +98,7 @@ export class AuthService {
 
         if(expiresInDuration > 0) {
             this.token = authInfo.token;
+            this.authenticated = true;
             this.setTimer(expiresInDuration/1000);
 
         } else {

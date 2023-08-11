@@ -12,8 +12,10 @@ import { TodoListComponent } from './todo/todo-list/todo-list.component';
 import { LogInComponent } from './auth/log-in/login.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
 
+import { AuthGuard } from './route.guards';
+
 const routes: Route[] = [
-  { path: '', component: TodoComponent },
+  { path: '', component: TodoComponent, canActivate: [AuthGuard]},
   { path: 'log-in', component: LogInComponent },
   { path: 'sign-up', component: SignUpComponent }
 
@@ -34,7 +36,7 @@ const routes: Route[] = [
     HttpClientModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [{useClass: AuthInterceptor, multi: true, provide: HTTP_INTERCEPTORS}],
+  providers: [{useClass: AuthInterceptor, multi: true, provide: HTTP_INTERCEPTORS}, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
