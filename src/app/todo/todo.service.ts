@@ -15,7 +15,6 @@ export class TodoService {
     __v: number;
   }): void {
     const newTodo = new Todo(todo.checked, todo._id, todo.todo);
-    console.log('newTodo: ', newTodo)
 
     this.todos.push(newTodo);
     this.updatedTodos.next(this.todos.slice());

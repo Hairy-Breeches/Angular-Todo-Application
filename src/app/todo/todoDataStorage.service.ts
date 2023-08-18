@@ -13,12 +13,12 @@ export class TodoDataStorageService {
   constructor(private http: HttpClient, private todoService: TodoService, private authService: AuthService) { }
 
   createTodo(url: string, todo: { todo: string }) {
-    
     return this.http.post<{
       message: string;
-      todo: { checked: boolean; todo: string; __v: number; _id: string };
+      todo: { checked: boolean, todo: string, creator: string, __v: number, _id: string };
 
     }>(url, { ...todo, checked: false });
+
   }
 
   fetchTodos(url: string) {
@@ -45,6 +45,7 @@ export class TodoDataStorageService {
         },
         error: (error) => {
           console.log('Error: ', error);
+          
         },
       });
   }

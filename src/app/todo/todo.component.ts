@@ -77,14 +77,13 @@ export class TodoComponent implements OnInit, OnDestroy {
 
   onAddTodo(): void {
     const url = 'http://localhost:3000/api/todos/create-todo';
-
     const todo = this.todoForm.value;
 
     this.todoDataStorageService.createTodo(url, todo)
     .subscribe({
       next: responseData => {
-
         this.todos.push({id: responseData.todo._id, checked: responseData.todo.checked, todo: responseData.todo.todo});
+
       },
       error: err => {
 
