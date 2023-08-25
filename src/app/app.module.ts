@@ -1,42 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { RouterModule, Route } from '@angular/router';
-import { AuthInterceptor } from './auth/auth.interceptor';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { TodoComponent } from './todo/todo.component';
-import { TodoListComponent } from './todo/todo-list/todo-list.component';
-import { LogInComponent } from './auth/log-in/login.component';
-import { SignUpComponent } from './auth/sign-up/sign-up.component';
 
-import { AuthGuard } from './route.guards';
-
-const routes: Route[] = [
-  { path: '', component: TodoComponent, canActivate: [AuthGuard]},
-  { path: 'log-in', component: LogInComponent },
-  { path: 'sign-up', component: SignUpComponent }
-
-]
+import { AppRoutingModule } from './app-routing.module';
+import { TodoModule } from './todo/todo.module';
+import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './core.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TodoComponent,
-    TodoListComponent,
-    LogInComponent,
-    SignUpComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    TodoModule,
+    AuthModule,
+    CoreModule,
   ],
-  providers: [{useClass: AuthInterceptor, multi: true, provide: HTTP_INTERCEPTORS}, AuthGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

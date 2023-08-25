@@ -25,10 +25,8 @@ export class TodoComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const url = 'http://localhost:3000/api/todos/get-todos';
-
     this.todoDataStorageService
-      .fetchTodos(url)
+      .fetchTodos()
       .pipe(
         map(
           (responseData: {
@@ -40,31 +38,27 @@ export class TodoComponent implements OnInit, OnDestroy {
               __v: number;
             }[];
           }) => {
-            
             return {
               message: responseData.message,
               todos: responseData.todos.map((todo) => {
-                return { checked: todo.checked, id: todo._id, todo: todo.todo };
+                return new Todo(todo.checked, todo._id, todo.todo);
               }),
             };
           }
         )
       )
       .subscribe({
-        next: responseData => {
+        next: (responseData) => {
           this.todoService.setTodos(responseData.todos);
           this.todos = this.todoService.getTodos();
-
         },
-        error: err => {
-
+        error: (err) => {
           console.log('Error: ', err.message);
-        }
+        },
       });
 
     this.updatedTodosSubscription = this.todoService.updatedTodos.subscribe(
-      todos => {
-
+      (todos) => {
         this.todos = todos;
       }
     );
@@ -72,25 +66,26 @@ export class TodoComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.authService.logOut();
-
   }
 
   onAddTodo(): void {
-    const url = 'http://localhost:3000/api/todos/create-todo';
     const todo = this.todoForm.value;
 
-    this.todoDataStorageService.createTodo(url, todo)
-    .subscribe({
-      next: responseData => {
-        this.todos.push({id: responseData.todo._id, checked: responseData.todo.checked, todo: responseData.todo.todo});
+    this.todoDataStorageService.createTodo(todo).subscribe({
+      next: (responseData) => {
+        const todo = new Todo(
+          responseData.todo.checked,
+          responseData.todo._id,
+          responseData.todo.todo
+        );
 
+        this.todoService.addTodo(todo);
+        this.todos = this.todoService.getTodos();
       },
-      error: err => {
-
+      error: (err) => {
         console.log('Error: ', err.message);
-      }
+      },
     });
-
 
     this.todoForm.reset();
   }
