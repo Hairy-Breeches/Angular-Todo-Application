@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
+    "lucide-angular": "^0.269.0",
     "mongoose": "^7.4.2",
     "path": "^0.12.7",
     "rxjs": "~7.8.0",
