@@ -6,7 +6,7 @@ import { TodoComponent } from './todo.component';
 import { AuthGuard } from '../route.guards';
 
 const todoRoutes: Route[] = [
-  { path: '', component: TodoComponent, canActivate: [AuthGuard] },
+  { path: 'todos', component: TodoComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

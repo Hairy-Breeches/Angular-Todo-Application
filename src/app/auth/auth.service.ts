@@ -53,7 +53,7 @@ export class AuthService {
           );
           localStorage.setItem('token', responseData.token);
           localStorage.setItem('expiresIn', expirationDate.toISOString());
-          this.router.navigate(['/']);
+          this.router.navigate(['todos']);
         },
         error: (err) => {
           console.log('Error: ', err.message);
