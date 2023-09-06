@@ -24,7 +24,7 @@ exports.getTodo = (req, res) => {
   Todo.find({ creator: req.decodedToken.id })
     .then((documents) => {
       res.status(200).json({
-        message: "successfullt fetched todos!",
+        message: "successfully fetched todos!",
         todos: documents,
       });
     })

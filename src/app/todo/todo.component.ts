@@ -1,96 +1,39 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Store } from '@ngrx/store';
+
+import * as TodoActions from '../todo/store/todo.actions';
+import * as AuthAction from '../auth/store/auth.actions';
+import * as fromApp from '../store/app.reducer';
 
 import { Todo } from './todo.model';
-
-import { TodoDataStorageService } from './todoDataStorage.service';
-import { TodoService } from './todo.service';
-import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
 })
-export class TodoComponent implements OnInit, OnDestroy {
+export class TodoComponent implements OnInit {
   todos: Todo[] = [];
   @ViewChild('form') todoForm: NgForm;
-  updatedTodosSubscription: Subscription;
 
-  constructor(
-    private todoDataStorageService: TodoDataStorageService,
-    private todoService: TodoService,
-    private authService: AuthService
-  ) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.todoDataStorageService
-      .fetchTodos()
-      .pipe(
-        map(
-          (responseData: {
-            message: string;
-            todos: {
-              _id: string;
-              checked: boolean;
-              todo: string;
-              __v: number;
-            }[];
-          }) => {
-            return {
-              message: responseData.message,
-              todos: responseData.todos.map((todo) => {
-                return new Todo(todo.checked, todo._id, todo.todo);
-              }),
-            };
-          }
-        )
-      )
-      .subscribe({
-        next: (responseData) => {
-          this.todoService.setTodos(responseData.todos);
-          this.todos = this.todoService.getTodos();
-        },
-        error: (err) => {
-          console.log('Error: ', err.message);
-        },
-      });
-
-    this.updatedTodosSubscription = this.todoService.updatedTodos.subscribe(
-      (todos) => {
-        this.todos = todos;
-      }
-    );
+    this.store.dispatch(TodoActions.fetchTodo());
+    this.store.select('todo').subscribe((todos) => (this.todos = todos.todos));
   }
 
   onLogout(): void {
-    this.authService.logOut();
+    this.store.dispatch(AuthAction.logOut());
   }
 
   onAddTodo(): void {
-    const todo = this.todoForm.value;
+    const todo = this.todoForm.value.todo;
 
-    this.todoDataStorageService.createTodo(todo).subscribe({
-      next: (responseData) => {
-        const todo = new Todo(
-          responseData.todo.checked,
-          responseData.todo._id,
-          responseData.todo.todo
-        );
-
-        this.todoService.addTodo(todo);
-        this.todos = this.todoService.getTodos();
-      },
-      error: (err) => {
-        console.log('Error: ', err.message);
-      },
-    });
+    this.store.dispatch(
+      TodoActions.createTodo({ todo: todo, id: null, checked: false })
+    );
 
     this.todoForm.reset();
-  }
-
-  ngOnDestroy(): void {
-    this.updatedTodosSubscription.unsubscribe();
   }
 }

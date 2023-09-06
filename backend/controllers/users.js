@@ -41,22 +41,33 @@ exports.loginUser = (req, res) => {
 exports.signupUser = (req, res) => {
   const data = req.body.password;
   const saltRounds = 10;
+  const user = new User(null, null);
 
   bcrypt
     .hash(data, saltRounds)
     .then((hash) => {
-      const user = new User({ email: req.body.email, password: hash });
+      user.email = req.body.email;
+      user.password = hash;
 
-      return user.save();
+      return User.findOne({ email: user.email });
     })
-    .then(() => {
-      res.status(201).json({
-        message: "User successfully created!",
-      });
+    .then((result) => {
+      if (result) {
+        res.status(401).json({
+          message: "User already exists!",
+        });
+      } else {
+        user.save().then(() => {
+          res.status(201).json({
+            message: "User successfully created!",
+          });
+        });
+      }
     })
     .catch(() => {
+      console.log("error at signup!");
       res.status(401).json({
-        message: "Auth Failed!",
+        message: "Authentication Failed!",
       });
     });
 };

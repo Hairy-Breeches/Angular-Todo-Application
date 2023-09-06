@@ -57,5 +57,8 @@
         name="arrow-big-right"
       ></lucide-icon>
     </div>
+    <p *ngIf="authError" class="text-warning font-medium">
+      {{ authError }}
+    </p>
   </form>
 </div>
