@@ -58,5 +58,8 @@
       ></lucide-icon>
     </div>
     <p *ngIf="authError" class="text-warning font-medium">{{ authError }}</p>
+    <p *ngIf="authSuccess" class="text-primary-1 font-medium">
+      {{ authSuccess }}
+    </p>
   </form>
 </div>

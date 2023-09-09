@@ -15,8 +15,10 @@ exports.createTodo = (req, res) => {
         todo: document,
       });
     })
-    .catch((err) => {
-      console.log("Error: ", err.message);
+    .catch(() => {
+      res.status(500).json({
+        message: "server failed to create Todo!",
+      });
     });
 };
 
@@ -28,8 +30,10 @@ exports.getTodo = (req, res) => {
         todos: documents,
       });
     })
-    .catch((err) => {
-      console.log("Error", err.message);
+    .catch(() => {
+      res.status(500).json({
+        message: "server failed to get Todos!",
+      });
     });
 };
 
@@ -44,14 +48,16 @@ exports.editTodo = (req, res) => {
         todo: document,
       });
     })
-    .catch((err) => {
-      console.log("Error: ", err.message);
+    .catch(() => {
+      res.status(500).json({
+        message: "server failed to edit Todo!",
+      });
     });
 };
 
 exports.deleteTodo = (req, res) => {
-  Todo.deleteOne({ _id: req.query.id, creator: req.decodedToken.id }).then(
-    (result) => {
+  Todo.deleteOne({ _id: req.query.id, creator: req.decodedToken.id })
+    .then((result) => {
       if (result.deletedCount) {
         res.status(202).json({
           message: "Successfully deleted todo!",
@@ -59,6 +65,10 @@ exports.deleteTodo = (req, res) => {
       } else {
         res.status(401).json({ message: "Not Authorized!" });
       }
-    }
-  );
+    })
+    .catch(() => {
+      res.status(500).json({
+        message: "server failed to create!",
+      });
+    });
 };

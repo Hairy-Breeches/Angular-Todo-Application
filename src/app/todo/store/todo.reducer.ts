@@ -8,10 +8,12 @@ export interface State {
     checked: boolean;
     id: string;
   }[];
+  error: string;
 }
 
 const initialState: State = {
   todos: [],
+  error: null,
 };
 
 export const todoReducer = createReducer(
@@ -47,7 +49,10 @@ export const todoReducer = createReducer(
 
     return stateCopy;
   }),
-  on(TodoActions.authenticationError, (state, actionState) => {
-    return { ...state };
+  on(TodoActions.serverError, (state, actionState) => {
+    return {
+      ...state,
+      error: actionState.message,
+    };
   })
 );

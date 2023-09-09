@@ -12,12 +12,14 @@ import * as fromApp from '../../store/app.reducer';
 })
 export class SignUpComponent implements OnInit {
   authError: string = null;
+  authSuccess: string = null;
 
   constructor(private router: Router, private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
     this.store.select('auth').subscribe((state) => {
       this.authError = state.authError;
+      this.authSuccess = state.authSuccess;
     });
   }
 
@@ -34,6 +36,17 @@ export class SignUpComponent implements OnInit {
   }
 
   onSwitchingToLogIn(): void {
+    this.store.dispatch(
+      AuthActions.clearState({
+        email: null,
+        password: null,
+        authenticated: false,
+        authError: null,
+        authSuccess: null,
+        token: null,
+        expirationDuration: null,
+      })
+    );
     this.router.navigate(['log-in']);
   }
 }

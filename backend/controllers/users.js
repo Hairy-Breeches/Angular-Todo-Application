@@ -8,20 +8,26 @@ exports.loginUser = (req, res) => {
 
   User.findOne({ email: req.body.email })
     .then((user) => {
-      if (!user)
+      if (!user) {
         res.status(401).json({
           message: "Auth Failed!",
         });
+
+        return;
+      }
 
       fetchedUser = user;
 
       return bcrypt.compare(req.body.password, user.password);
     })
     .then((result) => {
-      if (!result)
+      if (!result) {
         res.status(401).json({
           message: "Auth Failed!",
         });
+
+        return;
+      }
 
       const payload = {
         email: fetchedUser.email,
@@ -35,6 +41,13 @@ exports.loginUser = (req, res) => {
         token: token,
         expiresIn: 3600,
       });
+    })
+    .catch(() => {
+      if (!res.headersSent) {
+        res.status(500).json({
+          message: "Server failed to process the request!",
+        });
+      }
     });
 };
 
@@ -56,18 +69,20 @@ exports.signupUser = (req, res) => {
         res.status(401).json({
           message: "User already exists!",
         });
-      } else {
-        user.save().then(() => {
-          res.status(201).json({
-            message: "User successfully created!",
-          });
-        });
+
+        return;
       }
+      user.save().then(() => {
+        res.status(201).json({
+          message: "User successfully created!",
+        });
+      });
     })
     .catch(() => {
-      console.log("error at signup!");
-      res.status(401).json({
-        message: "Authentication Failed!",
-      });
+      if (!res.headersSent) {
+        res.status(401).json({
+          message: "Authentication Failed!",
+        });
+      }
     });
 };

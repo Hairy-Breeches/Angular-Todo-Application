@@ -31,7 +31,7 @@ export class TodoComponent implements OnInit {
     const todo = this.todoForm.value.todo;
 
     this.store.dispatch(
-      TodoActions.createTodo({ todo: todo, id: null, checked: false })
+      TodoActions.onCreateTodo({ todo: todo, id: null, checked: false })
     );
 
     this.todoForm.reset();

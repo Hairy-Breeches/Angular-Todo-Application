@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
-import * as fromAuth from '../../auth/store/auth.reducer';
+import * as fromApp from '../../store/app.reducer';
 import * as AuthActions from '../../auth/store/auth.actions';
 
 @Component({
@@ -15,10 +15,10 @@ export class LogInComponent implements OnInit {
   storeSubsScription: Subscription;
   authError: string;
 
-  constructor(private router: Router, private store: Store<fromAuth.State>) {}
+  constructor(private router: Router, private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
-    this.store.subscribe((state) => {
+    this.store.select('auth').subscribe((state) => {
       this.authError = state.authError;
     });
   }
@@ -35,6 +35,17 @@ export class LogInComponent implements OnInit {
   }
 
   onSwitchingToSignUp(): void {
+    this.store.dispatch(
+      AuthActions.clearState({
+        email: null,
+        password: null,
+        authenticated: false,
+        authError: null,
+        authSuccess: null,
+        token: null,
+        expirationDuration: null,
+      })
+    );
     this.router.navigate(['sign-up']);
   }
 }

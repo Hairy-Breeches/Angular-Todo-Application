@@ -10,7 +10,7 @@ mongoose
   .connect(
     "mongodb+srv://Siraj--Ansari:" +
       process.env.MONGO_ATLAS_PS +
-      "@cluster0.xbctr6i.mongodb.net/todos-angular?retryWrites=true&w=majority"
+      "@cluster0.xbctr6i.mongodb.net/?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Database connected successfully!");

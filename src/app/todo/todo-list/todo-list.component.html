@@ -1,4 +1,6 @@
 <div>
+  <p *ngIf="error" class="text-warning font-medium">{{ error }}</p>
+
   <div
     [ngStyle]="{ 'background-color': todoItem.checked ? 'lightgreen' : '' }"
     class="flex bg-soft p-4 w-full relative rounded-md"

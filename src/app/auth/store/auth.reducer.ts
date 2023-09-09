@@ -7,6 +7,7 @@ export interface State {
   password: string;
   authenticated: boolean;
   authError: string;
+  authSuccess: string;
   token: string;
   expirationDuration: number;
 }
@@ -16,6 +17,7 @@ const initialState: State = {
   password: null,
   authenticated: false,
   authError: null,
+  authSuccess: null,
   token: null,
   expirationDuration: null,
 };
@@ -25,7 +27,7 @@ export const authReducer = createReducer(
   on(AuthActions.authSuccess, (state, actionState) => {
     return {
       ...state,
-      authError: actionState.message,
+      authSuccess: actionState.message,
     };
   }),
   on(AuthActions.authFailed, (state, actionState) => {
@@ -45,6 +47,7 @@ export const authReducer = createReducer(
       email: null,
       password: null,
       authError: null,
+      authSuccess: null,
       authenticated: false,
       token: null,
       expirationDuration: null,
@@ -55,5 +58,8 @@ export const authReducer = createReducer(
       ...state,
       ...actionState,
     };
+  }),
+  on(AuthActions.clearState, (action, actionState) => {
+    return actionState;
   })
 );

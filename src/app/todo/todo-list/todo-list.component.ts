@@ -14,16 +14,21 @@ import { Todo } from '../todo.model';
 export class TodoListComponent implements OnInit {
   @Input() todoItem: Todo;
   id: number;
+  error: string;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.select('todo').subscribe((state) => {
+      this.error = this.error;
+    });
+  }
 
   onDeleteTodo(): void {
-    this.store.dispatch(TodoActions.deleteTodo({ id: this.todoItem.id }));
+    this.store.dispatch(TodoActions.onDeleteTodo({ id: this.todoItem.id }));
   }
 
   onTodoChecked(): void {
-    this.store.dispatch(TodoActions.checkTodo({ id: this.todoItem.id }));
+    this.store.dispatch(TodoActions.onCheckTodo({ id: this.todoItem.id }));
   }
 }

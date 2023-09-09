@@ -1,6 +1,6 @@
 {
   "env": {
-    "MONGO_ATLAS_PS": "BOZrUHBcjxiCvlJZ",
+    "MONGO_ATLAS_PS": "NIeeRHwdoDEdhhQj",
     "SECRET_PHRASE": "Secret_payload_signature_seed"
   }
 }
